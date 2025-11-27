@@ -35,10 +35,10 @@ class DiarizationService:
             if not hf_token:
                 raise ValueError("HF_TOKEN required. Get it at https://huggingface.co/settings/tokens")
 
-            # Use token parameter directly (modern huggingface_hub API)
+            # use_auth_token for pyannote.audio 3.x
             self.pipeline = Pipeline.from_pretrained(
                 "pyannote/speaker-diarization-3.1",
-                token=hf_token
+                use_auth_token=hf_token
             )
             self.pipeline.to(self.device)
 
