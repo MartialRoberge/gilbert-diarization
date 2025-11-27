@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+    <title>Gilbert · Diarization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <img src="images/logo.svg" alt="Gilbert">
+                <span class="logo-text">Gilbert</span>
+            </div>
+            <div class="header-actions">
+                <button id="new-file-btn" class="btn btn-secondary hidden">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Nouveau fichier
+                </button>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="main">
+            <div class="content">
+                <!-- Upload -->
+                <div id="upload-section" class="upload-section">
+                    <div class="upload-header">
+                        <h1>Séparation de locuteurs</h1>
+                        <p>Identifiez et isolez automatiquement chaque voix de vos fichiers audio</p>
+                    </div>
+
+                    <div id="upload-zone" class="upload-zone">
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="upload-text">Déposez votre fichier ici</div>
+                        <div class="upload-hint">ou cliquez pour parcourir</div>
+                        <div class="upload-formats">
+                            <span class="format-tag">MP3</span>
+                            <span class="format-tag">WAV</span>
+                            <span class="format-tag">MP4</span>
+                            <span class="format-tag">M4A</span>
+                            <span class="format-tag">MOV</span>
+                        </div>
+                        <input type="file" id="file-input" accept=".mp3,.wav,.mp4,.mov,.m4a,.ogg,.flac,.webm,.aac" class="hidden">
+                    </div>
+                </div>
+
+                <!-- Processing -->
+                <div id="progress-section" class="processing-section hidden">
+                    <div class="processing-visual">
+                        <img src="images/loading.svg" alt="Chargement" class="processing-logo">
+                    </div>
+                    <div class="processing-info">
+                        <h2 id="progress-percent">Analyse en cours...</h2>
+                        <p id="progress-text" class="processing-status">Préparation du fichier</p>
+                    </div>
+                    <div class="processing-bar">
+                        <div id="progress-bar-fill" class="processing-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div id="results-section" class="results-section hidden">
+                    <div class="results-header">
+                        <div class="results-title">
+                            <h2>Analyse terminée</h2>
+                            <p class="results-meta">
+                                <span id="speaker-count">0</span> locuteurs ·
+                                <span id="segment-count">0</span> segments ·
+                                <span id="total-duration">0:00</span>
+                            </p>
+                        </div>
+                        <button id="download-all-btn" class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Tout télécharger
+                        </button>
+                    </div>
+
+                    <div class="timeline-container">
+                        <div class="timeline-header">
+                            <span class="timeline-label">Répartition temporelle</span>
+                            <div id="timeline-legend" class="timeline-legend"></div>
+                        </div>
+                        <div id="timeline" class="timeline"></div>
+                        <div class="timeline-time">
+                            <span>0:00</span>
+                            <span id="timeline-end">0:00</span>
+                        </div>
+                    </div>
+
+                    <div id="tracks-list" class="tracks-container"></div>
+                </div>
+
+                <!-- Error -->
+                <div id="error-section" class="error-section hidden">
+                    <div class="error-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <div class="error-title">Une erreur est survenue</div>
+                    <div id="error-message" class="error-message"></div>
+                    <button id="retry-btn" class="btn btn-secondary">Réessayer</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <span>Powered by</span>
+                <a href="https://huggingface.co/pyannote/speaker-diarization-3.1" target="_blank" rel="noopener" class="footer-link">
+                    <strong>pyannote</strong>
+                </a>
+                <span>· Speaker Diarization 3.1</span>
+                <span>·</span>
+                <a href="https://github.com/pyannote/pyannote-audio" target="_blank" rel="noopener" class="footer-link">MIT License</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- WaveSurfer.js -->
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+
+    <!-- Configuration: Change this URL to your Render backend URL -->
+    <script>
+        // ⚠️ IMPORTANT: Remplace cette URL par l'URL de ton backend Render
+        // Exemple: https://gilbert-diarization-api.onrender.com
+        window.API_URL = 'https://YOUR-APP-NAME.onrender.com';
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
