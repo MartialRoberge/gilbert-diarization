@@ -5,10 +5,11 @@ gunicorn==21.2.0
 
 # Audio processing - PyAnnote State of the Art
 pyannote.audio>=3.3.0
-torch>=2.8.0
-torchaudio>=2.8.0
+torch>=2.0.0,<2.5.0
+torchaudio>=2.0.0,<2.5.0
 pydub==0.25.1
-soundfile>=0.13.0
+audioop-lts
+soundfile>=0.12.0
 
 # Utilities
 python-dotenv==1.0.0
