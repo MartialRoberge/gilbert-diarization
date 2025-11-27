@@ -10,7 +10,6 @@ from pathlib import Path
 from pyannote.audio import Pipeline
 from pydub import AudioSegment
 from dotenv import load_dotenv
-from huggingface_hub import login
 
 load_dotenv()
 
@@ -36,10 +35,10 @@ class DiarizationService:
             if not hf_token:
                 raise ValueError("HF_TOKEN required. Get it at https://huggingface.co/settings/tokens")
 
-            login(token=hf_token)
-
+            # Use token parameter directly (modern huggingface_hub API)
             self.pipeline = Pipeline.from_pretrained(
-                "pyannote/speaker-diarization-3.1"
+                "pyannote/speaker-diarization-3.1",
+                token=hf_token
             )
             self.pipeline.to(self.device)
 
