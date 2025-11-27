@@ -12,7 +12,7 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 
-from diarization import DiarizationService
+from backend.diarization import DiarizationService
 
 load_dotenv()
 
